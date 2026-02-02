@@ -25,9 +25,9 @@
       padding: 40px;
       text-align: center;
       width: 330px;
+      position: relative;
       animation: fadeIn 1.8s ease;
       box-shadow: 0 25px 45px rgba(0,0,0,0.3);
-      position: relative;
     }
 
     h1 {
@@ -36,17 +36,18 @@
       animation: pulse 1.5s infinite;
     }
 
+    h2 {
+      margin: 20px 0;
+    }
+
     p {
       font-size: 1.1rem;
       margin-bottom: 20px;
     }
 
     .buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
       position: relative;
-      height: 60px;
+      height: 70px;
     }
 
     button {
@@ -56,7 +57,6 @@
       font-size: 1rem;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
     }
 
     .yes {
@@ -68,6 +68,9 @@
       background: rgba(255,255,255,0.35);
       color: white;
       position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
     }
 
     button:hover {
@@ -79,7 +82,6 @@
       margin-top: 25px;
       font-size: 1.2rem;
       font-weight: bold;
-      animation: fadeIn 1s ease;
     }
 
     .heart {
@@ -108,11 +110,78 @@
 
 <body>
 
-  <!-- Background music -->
+  <!-- Background Music -->
   <audio id="bgMusic" loop>
     <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
   </audio>
 
   <div class="card" onclick="playMusic()">
     <h1>Hey Pravya ❤️</h1>
-    <
+    <p>
+      Every moment with you feels magical ✨<br>
+      So I have one important question…
+    </p>
+
+    <h2>Will you be my Valentine? 🌹</h2>
+
+    <div class="buttons">
+      <button class="yes" onclick="yesClick()">Yes 💖</button>
+      <button class="no" id="noBtn">No 🙈</button>
+    </div>
+
+    <div id="response"></div>
+  </div>
+
+  <script>
+    let musicStarted = false;
+    const noBtn = document.getElementById("noBtn");
+    const card = document.querySelector(".card");
+
+    function playMusic() {
+      if (!musicStarted) {
+        document.getElementById("bgMusic").play();
+        musicStarted = true;
+      }
+    }
+
+    function yesClick() {
+      document.getElementById("response").innerText =
+        "YAYYY 🥹❤️ Best Valentine ever!";
+      createHearts();
+    }
+
+    function moveNo() {
+      const cardRect = card.getBoundingClientRect();
+
+      const maxX = cardRect.width - noBtn.offsetWidth - 20;
+      const maxY = cardRect.height - noBtn.offsetHeight - 20;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    // Desktop + touchpad
+    noBtn.addEventListener("mouseenter", moveNo);
+
+    // Mobile + fallback
+    noBtn.addEventListener("click", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+
+    function createHearts() {
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+  </script>
+
+</body>
+</html>
